@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Royal Toss — Premium Coin Flip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Extras -->
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- ===== SCREEN 1: PLAYER SETUP ===== -->
+  <section id="screen-setup" class="screen active">
+    <div class="setup-card glass-card">
+      <div class="logo-badge">♔</div>
+      <h1 class="brand-title">Royal Toss</h1>
+      <p class="brand-sub">A game of chance & elegance</p>
+
+      <div class="divider"></div>
+
+      <div class="input-group">
+        <label class="input-label">Player One</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👑</span>
+          <input type="text" id="p1-name" class="gold-input" placeholder="Enter your name" maxlength="20" />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Player Two</label>
+        <div class="input-wrapper">
+          <span class="input-icon">⚔️</span>
+          <input type="text" id="p2-name" class="gold-input" placeholder="Enter your name" maxlength="20" />
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn-primary" onclick="startGame()">
+        <span class="btn-text">Begin the Duel</span>
+        <span class="btn-shine"></span>
+      </button>
+
+      <p class="setup-note">Best of 5 rounds · First to 3 wins</p>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN 2: GAME ===== -->
+  <section id="screen-game" class="screen">
+
+    <!-- Header / Scoreboard -->
+    <div class="game-header">
+      <div class="score-card glass-card">
+        <div class="player-score" id="p1-score-block">
+          <div class="player-avatar" id="p1-avatar">P1</div>
+          <div class="player-info">
+            <span class="player-name" id="p1-display-name">Player 1</span>
+            <span class="player-label">Challenger</span>
+          </div>
+          <div class="score-badge" id="p1-score-val">0</div>
+        </div>
+
+        <div class="vs-divider">
+          <div class="vs-ring">VS</div>
+          <div class="round-info">Round <span id="round-num">1</span></div>
+        </div>
+
+        <div class="player-score" id="p2-score-block">
+          <div class="score-badge" id="p2-score-val">0</div>
+          <div class="player-info" style="text-align:right">
+            <span class="player-name" id="p2-display-name">Player 2</span>
+            <span class="player-label">Challenger</span>
+          </div>
+          <div class="player-avatar" id="p2-avatar">P2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coin Stage -->
+    <div class="coin-stage">
+
+      <!-- Coin -->
+      <div class="coin-scene" id="coin-scene">
+        <div class="coin" id="coin">
+          <div class="coin-face coin-heads">
+            <div class="coin-ring"></div>
+            <div class="coin-symbol">♔</div>
+            <div class="coin-text">HEADS</div>
+          </div>
+          <div class="coin-face coin-tails">
+            <div class="coin-ring"></div>
+            <div class="coin-symbol">✦</div>
+            <div class="coin-text">TAILS</div>
+          </div>
+        </div>
+        <div class="coin-shadow" id="coin-shadow"></div>
+      </div>
+
+      <!-- Result Banner -->
+      <div class="result-banner" id="result-banner">
+        <div class="result-icon" id="result-icon">✦</div>
+        <div class="result-text" id="result-text">It's Tails!</div>
+        <div class="result-winner" id="result-winner">Player 2 wins this round!</div>
+      </div>
+
+    </div>
+
+    <!-- Choice / Action Panel -->
+    <div class="action-panel glass-card">
+
+      <!-- Step 1: Player 1 picks -->
+      <div class="action-step" id="step-pick">
+        <p class="action-prompt">
+          <span id="picker-name">Player 1</span>, choose your side
+        </p>
+        <div class="choice-buttons">
+          <button class="btn-choice" id="btn-heads" onclick="pickSide('heads')">
+            <span class="choice-icon">♔</span>
+            <span>Heads</span>
+            <span class="btn-shine"></span>
+          </button>
+          <button class="btn-choice" id="btn-tails" onclick="pickSide('tails')">
+            <span class="choice-icon">✦</span>
+            <span>Tails</span>
+            <span class="btn-shine"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Flipping -->
+      <div class="action-step hidden" id="step-flip">
+        <p class="flip-status" id="flip-status-text">Flipping the coin…</p>
+        <div class="flip-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Step 3: Next round / End -->
+      <div class="action-step hidden" id="step-next">
+        <button class="btn-primary" id="btn-next" onclick="nextRound()">
+          <span class="btn-text">Next Round</span>
+          <span class="btn-shine"></span>
+        </button>
+      </div>
+
+    </div>
+
+    <button class="btn-ghost" onclick="restartGame()">↩ Restart Game</button>
+
+  </section>
+
+  <!-- ===== SCREEN 3: WINNER ===== -->
+  <section id="screen-winner" class="screen">
+    <div class="winner-card glass-card">
+      <div class="confetti-ring">
+        <div class="trophy-icon">🏆</div>
+      </div>
+      <p class="winner-label">Champion</p>
+      <h2 class="winner-name" id="winner-name">Player 1</h2>
+      <p class="winner-sub" id="winner-sub">Wins the Royal Toss!</p>
+
+      <div class="final-scores glass-card">
+        <div class="final-score-row">
+          <span id="final-p1-name">Player 1</span>
+          <span id="final-p1-score">3</span>
+        </div>
+        <div class="final-score-divider"></div>
+        <div class="final-score-row">
+          <span id="final-p2-name">Player 2</span>
+          <span id="final-p2-score">2</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="restartGame()">
+        <span class="btn-text">Play Again</span>
+        <span class="btn-shine"></span>
+      </button>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
